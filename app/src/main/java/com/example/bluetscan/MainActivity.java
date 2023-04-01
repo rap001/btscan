@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
+
         // Initialize device list and adapter
         mDeviceList = new ArrayList<>();
         mDeviceListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 mDeviceList.add(device);
 
                 // Add the device name and address to the list view
-                mDeviceListAdapter.add(device.getName() + "\n" + device.getAddress());
+                mDeviceListAdapter.add(device.describeContents() + "\n" + device.getAddress());
             }
         }
 

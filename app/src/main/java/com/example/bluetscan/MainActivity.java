@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Initialize device list and adapter
-        mDeviceList = new ArrayList<>();
+        mDeviceList = new ArrayList<BluetoothDevice>();
         mDeviceListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         mDeviceListView = findViewById(R.id.device_list);
         mDeviceListView.setAdapter(mDeviceListAdapter);
@@ -76,15 +76,16 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+
+            // Clear the device list before starting a new scan
+            mDeviceList.clear();
+            mDeviceListAdapter.clear();
+
+            // Start the scan
+            mBluetoothAdapter.getBluetoothLeScanner().startScan(mScanCallback);
             return;
         }
 
-        // Clear the device list before starting a new scan
-        mDeviceList.clear();
-        mDeviceListAdapter.clear();
-
-        // Start the scan
-        mBluetoothAdapter.getBluetoothLeScanner().startScan(mScanCallback);
     }
 
     private ScanCallback mScanCallback = new ScanCallback() {
@@ -99,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
             if (!mDeviceList.contains(device)) {
                 mDeviceList.add(device);
 
-                // Add the device name and address to the list view
-                mDeviceListAdapter.add(device.describeContents() + "\n" + device.getAddress());
+
+                mDeviceListAdapter.add(device.getType() + "\n" + device.getAddress());
             }
         }
 

@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        viewpage.setAdapter();
+        MyPagerAdapter pageadapter=new MyPagerAdapter(getSupportFragmentManager());
+        viewpage.setAdapter(pageadapter);
         tabs.setupWithViewPager(findViewById(R.id.views));
     }
 

@@ -6,6 +6,15 @@
     tools:context=".FragmentA">
 
     <!-- TODO: Update blank fragment layout -->
+    <Button
+        android:id="@+id/round_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Round Button"
+        android:layout_gravity="center"
+        android:textColor="@android:color/white"
+        android:padding="16dp"
+        android:background="@drawable/rb" />
 
 
 </FrameLayout>

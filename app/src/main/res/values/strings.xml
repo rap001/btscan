@@ -2,4 +2,7 @@
     <string name="app_name">BlueTscan</string>
     <string name="back_button_description">Back</string>
     <string name="settings">Settings</string>
+    <string name="tabs">Tabs for different sections</string>
+    <string name="tab1">Scan</string>
+    <string name="tab2">History</string>
 </resources>

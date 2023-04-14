@@ -32,7 +32,7 @@
             android:rotationX="4"
             android:text="@string/settings"
             android:textColor="@color/white"
-            android:textSize="25dp"
+            android:textSize="25sp"
             android:textStyle="bold"
             tools:layout_editor_absoluteX="140dp"
             tools:layout_editor_absoluteY="16dp" />

@@ -2,6 +2,7 @@ package com.example.bluetscan;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -37,7 +38,25 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.addTab(tabs.newTab().setText("Scan"));
         tabs.addTab(tabs.newTab().setText("History"));
+        ViewPager viewpage=findViewById(R.id.views);
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
 
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        viewpage.setAdapter();
+        tabs.setupWithViewPager(findViewById(R.id.views));
     }
 
 }

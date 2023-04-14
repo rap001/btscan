@@ -13,7 +13,7 @@
         android:contentDescription="@string/tabs">
 
     </com.google.android.material.tabs.TabLayout>
-    <androidx.viewpager2.widget.ViewPager2
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/views"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

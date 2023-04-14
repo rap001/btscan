@@ -10,14 +10,14 @@ import java.util.List;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> fragmentList = new ArrayList<>();
+    private final List<Fragment> fragmentList = new ArrayList<>();
     private List<String> titleList = new ArrayList<>();
 
-    public MyPagerAdapter(FragmentManager fragmentManager) {
-        super(fragmentManager);
-    }
+    MyPagerAdapter(FragmentManager fragment)
+    {super(fragment);}
 
-    public void addFragment(Fragment fragment, String title) {
+
+    public void addFragment(@NonNull Fragment fragment, String title) {
         fragmentList.add(fragment);
         titleList.add(title);
     }

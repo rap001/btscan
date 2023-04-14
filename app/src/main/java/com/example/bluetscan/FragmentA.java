@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-lass FragmentA extends Fragment {
+class  FragmentA extends Fragment {
 
 
 

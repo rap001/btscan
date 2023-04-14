@@ -5,6 +5,7 @@
     <string name="tabs">Tabs for different sections</string>
     <string name="tab1">Scan</string>
     <string name="tab2">History</string>
+    <string name="scan">Scan</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

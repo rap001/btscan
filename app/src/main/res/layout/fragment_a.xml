@@ -6,6 +6,13 @@
     tools:context=".FragmentA">
 
     <!-- TODO: Update blank fragment layout -->
-
+    <Button
+        android:id="@+id/but1"
+        android:layout_width="77dp"
+        android:layout_height="76dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle"
+        android:text="Scan"
+        android:textSize="15dp" />
 
 </FrameLayout>

@@ -7,12 +7,14 @@
 
     <!-- TODO: Update blank fragment layout -->
     <Button
-        android:id="@+id/but1"
-        android:layout_width="77dp"
-        android:layout_height="76dp"
+        android:id="@+id/round_button"
+        android:layout_width="121dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/circle"
-        android:text="Scan"
-        android:textSize="15dp" />
+        android:padding="16dp"
+        android:text="scan"
+        android:textColor="@android:color/white" />
+
 
 </FrameLayout>

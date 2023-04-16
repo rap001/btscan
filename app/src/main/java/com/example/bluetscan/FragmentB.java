@@ -22,16 +22,6 @@ public class FragmentB extends Fragment {
         return inflater.inflate(R.layout.fragment_b, container, false);
 
 
-        ListView listView1 = new ListView(this);
-        listView1=listView1.findViewById(R.id.my_list_view);
-        ArrayList<String> items = new ArrayList<>();
-        items.add("Item 1");
-        items.add("Item 2");
-        items.add("Item 3");
-
-        MyListAdapter adapter = new MyListAdapter(this, items);
-        listView1.setAdapter(adapter);
-
 
     }
 }

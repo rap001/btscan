@@ -16,10 +16,10 @@ import java.util.Set;
 public class CustomBaseAdapter extends BaseAdapter {
 
     Context context;
-    BluetoothDevice [] btSet;
+    String [] btSet;
     LayoutInflater inflater;
 
-    public CustomBaseAdapter(Context ctx, BluetoothDevice [] btArr){
+    public CustomBaseAdapter(Context ctx, String [] btArr){
         context=ctx;
         btSet=btArr;
         inflater=LayoutInflater.from(ctx);
@@ -46,7 +46,7 @@ public class CustomBaseAdapter extends BaseAdapter {
         TextView textView=(TextView) convertView.findViewById(R.id.title_textview);
         ImageView img=(ImageView) convertView.findViewById(R.id.imageicon);
         img.setImageResource(R.drawable.bluetooth);
-        textView.setText(btSet[i].getAddress());
+        textView.setText(btSet[i]);
         return convertView;
     }
 }

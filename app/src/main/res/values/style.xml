@@ -8,5 +8,9 @@
     <style name="MyButtonStyle" parent="Widget.MaterialComponents.Button">
         <!-- Define the properties for the button style here -->
     </style>
+    <style name="AppTheme2" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
 
 </resources>

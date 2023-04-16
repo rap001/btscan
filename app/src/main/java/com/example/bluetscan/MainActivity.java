@@ -1,5 +1,6 @@
 package com.example.bluetscan;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.ViewPager;
@@ -9,7 +10,13 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
 
 
 import com.google.android.material.tabs.TabLayout;
@@ -24,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         TabLayout tabs = findViewById(R.id.tabs);
 
@@ -42,24 +48,24 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(pg);
 
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Set<BluetoothDevice> deviceSet=adapter.getBondedDevices();
-        BluetoothDevice[] deviceArray = new BluetoothDevice[deviceSet.size()];
-        deviceSet.toArray(deviceArray);
-        CustomBaseAdapter customBaseAdapter=new CustomBaseAdapter(getApplicationContext(),deviceArray);
-        listView=(ListView) listView.findViewById(R.id.customListView);
-        listView.setAdapter(customBaseAdapter);
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int item_id= item.getItemId();
+
+        if (item_id==R.id.settings){
+            setContentView(R.layout.settings);
+        }
+
+        return true;
+
+    }
 }

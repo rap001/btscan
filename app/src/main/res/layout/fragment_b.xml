@@ -12,12 +12,13 @@
         android:layout_height="71dp"
         android:layout_gravity="center"
         android:text="Saved"
+        android:textColor="@color/black"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <ListView
         android:id="@+id/list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent">
 
 
     </ListView>

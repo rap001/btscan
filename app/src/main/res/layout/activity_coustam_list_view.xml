@@ -16,6 +16,7 @@
         android:id="@+id/title_textview"
         android:gravity="center"
         android:textSize="30dp"
-        android:text="my text"/>
+        android:text="my text"
+        android:textColor="@color/black"/>
 
 </LinearLayout>

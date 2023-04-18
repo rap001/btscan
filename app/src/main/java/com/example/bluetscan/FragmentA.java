@@ -1,5 +1,6 @@
 package com.example.bluetscan;
 
+import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,11 @@ public class  FragmentA extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        BluetoothAdapter adapter=BluetoothAdapter.getDefaultAdapter();
+        if(!adapter.isEnabled())
+        {
+            AlertDialogExample.showAlertDialog(getActivity(),"Bluetooth","please enable Bluetooth");
+        }
         btn=view.findViewById(R.id.round_button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

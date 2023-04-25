@@ -16,17 +16,41 @@ import java.util.Set;
 public class CustomBaseAdapter extends BaseAdapter {
 
     Context context;
-    String [] btSet;
     LayoutInflater inflater;
+    String[] str;
+    String[] str1;
+    Set<BluetoothDevice> btset;
 
-    public CustomBaseAdapter(Context ctx, String [] btArr){
+    public CustomBaseAdapter(Context ctx, Set<BluetoothDevice> bset){
         context=ctx;
-        btSet=btArr;
+        btset=bset;
+        str=new String[bset.size()];
+        str1=new String[bset.size()];
+        int i=0;
+        if(bset.size()>0)
+        {
+            for(BluetoothDevice device:bset){
+                str[i]=device.getName();
+                str1[i]=device.getAddress();
+                i++;
+            }
+        }
         inflater=LayoutInflater.from(ctx);
+
+    }
+    public void changeBtSet(BluetoothDevice device){
+        if(btset.size()!=0)
+        {
+            btset.add(device);
+        }
+        else{
+            System.out.println("empty ptset");
+        }
+
     }
     @Override
     public int getCount() {
-        return btSet.length;
+        return str.length;
     }
 
     @Override
@@ -44,9 +68,11 @@ public class CustomBaseAdapter extends BaseAdapter {
 
         View convertView =inflater.inflate(R.layout.activity_coustam_list_view,null);
         TextView textView=(TextView) convertView.findViewById(R.id.title_textview);
+        TextView textView1=(TextView) convertView.findViewById(R.id.addr);
         ImageView img=(ImageView) convertView.findViewById(R.id.imageicon);
         img.setImageResource(R.drawable.bluetooth);
-        textView.setText(btSet[i]);
+        textView.setText(str[i]);
+        textView1.setText(str1[i]);
         return convertView;
     }
 }

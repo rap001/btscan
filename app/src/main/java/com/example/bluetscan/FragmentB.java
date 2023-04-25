@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,9 @@ import java.util.Set;
 
 public class FragmentB extends Fragment {
 
-
+    Set<BluetoothDevice> btset;
+    CustomBaseAdapter cd;
+    BluetoothAdapter adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -35,12 +38,17 @@ public class FragmentB extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //use bluetooth functionality here
-
-
-        String[] city={"rahees","mohammed","sreerag","akshay"};
+        adapter=BluetoothAdapter.getDefaultAdapter();
+        btset =adapter.getBondedDevices();
         ListView listView=(ListView)view.findViewById(R.id.list);
-        CustomBaseAdapter cd=new CustomBaseAdapter(getActivity(),city);
+        cd=new CustomBaseAdapter(getActivity(),btset);
         listView.setAdapter(cd);
     }
+
+    public void onDataChanged(BluetoothDevice newSet) {
+        System.out.println(newSet.getName());
+        btset.add(newSet);
+        cd.notifyDataSetChanged();
+    }
+
 }

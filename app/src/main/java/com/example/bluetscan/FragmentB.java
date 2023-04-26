@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Switch;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +28,7 @@ public class FragmentB extends Fragment {
     Set<BluetoothDevice> btset;
     CustomBaseAdapter cd;
     BluetoothAdapter adapter;
+    ListView listView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,15 +42,19 @@ public class FragmentB extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         adapter=BluetoothAdapter.getDefaultAdapter();
         btset =adapter.getBondedDevices();
-        ListView listView=(ListView)view.findViewById(R.id.list);
+        listView=(ListView)view.findViewById(R.id.list);
         cd=new CustomBaseAdapter(getActivity(),btset);
         listView.setAdapter(cd);
     }
 
     public void onDataChanged(BluetoothDevice newSet) {
-        System.out.println(newSet.getName());
-        btset.add(newSet);
+        System.out.println(newSet.getAddress());
+        Set<BluetoothDevice> updatedSet = new HashSet<>(btset);
+        updatedSet.add(newSet);
+        btset = updatedSet;
+        cd.setData(btset);
         cd.notifyDataSetChanged();
     }
+
 
 }

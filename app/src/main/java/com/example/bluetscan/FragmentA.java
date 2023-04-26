@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainer;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,14 +34,13 @@ public class FragmentA extends Fragment {
     BluetoothAdapter adapter;
     Set<BluetoothDevice> btset;
 
-    public interface OnDataChangeListener {
-        void onDataChanged(BluetoothDevice newSet);
+
+
+    public interface ListUpdate
+    {
+        void sendData(BluetoothDevice device);
     }
-
-    private OnDataChangeListener listener;
-
-
-
+    private ListUpdate listener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,7 +77,6 @@ public class FragmentA extends Fragment {
             }
         });
 
-
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -86,10 +85,25 @@ public class FragmentA extends Fragment {
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     String deviceName = device.getName();
                     String deviceHardwareAddress = device.getAddress();
-                    System.out.println(deviceName + " " + deviceHardwareAddress);
+                    if(listener!=null){
+                        listener.sendData(device);
+                    }
+                    //System.out.println(deviceName + " " + deviceHardwareAddress);
                 }
             }
         };
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (ListUpdate) ((MainActivity) getActivity());
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException("Error in retrieving data. Please try again");
+        }
     }
 
     @Override

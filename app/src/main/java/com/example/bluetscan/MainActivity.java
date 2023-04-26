@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Set;
 
 
-public class MainActivity extends AppCompatActivity implements FragmentA.OnDataChangeListener{
+public class MainActivity extends AppCompatActivity implements FragmentA.ListUpdate {
     ListView listView;
     BroadcastReceiver broadcastReceiver;
     FragmentB fb;
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements FragmentA.OnDataC
 
 
     @Override
-    public void onDataChanged(BluetoothDevice newSet) {
-        fb.onDataChanged(newSet);
+    public void sendData(BluetoothDevice device) {
+        fb.onDataChanged(device);
     }
 }

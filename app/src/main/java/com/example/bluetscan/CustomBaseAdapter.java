@@ -24,12 +24,12 @@ public class CustomBaseAdapter extends BaseAdapter {
     public CustomBaseAdapter(Context ctx, Set<BluetoothDevice> bset){
         context=ctx;
         btset=bset;
-        str=new String[bset.size()];
-        str1=new String[bset.size()];
+        str=new String[btset.size()];
+        str1=new String[btset.size()];
         int i=0;
-        if(bset.size()>0)
+        if(btset.size()>0)
         {
-            for(BluetoothDevice device:bset){
+            for(BluetoothDevice device:btset){
                 str[i]=device.getName();
                 str1[i]=device.getAddress();
                 i++;
@@ -38,15 +38,20 @@ public class CustomBaseAdapter extends BaseAdapter {
         inflater=LayoutInflater.from(ctx);
 
     }
-    public void changeBtSet(BluetoothDevice device){
-        if(btset.size()!=0)
+    public void setData(Set<BluetoothDevice> data) {
+        this.btset=data;
+        str=new String[btset.size()];
+        str1=new String[btset.size()];
+        int i=0;
+        if(btset.size()>0)
         {
-            btset.add(device);
+            for(BluetoothDevice device:btset){
+                str[i]=device.getName();
+                str1[i]=device.getAddress();
+                i++;
+            }
         }
-        else{
-            System.out.println("empty ptset");
-        }
-
+        notifyDataSetChanged();
     }
     @Override
     public int getCount() {

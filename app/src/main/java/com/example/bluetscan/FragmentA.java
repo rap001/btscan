@@ -55,7 +55,7 @@ public class FragmentA extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         adapter = BluetoothAdapter.getDefaultAdapter();
         if (!adapter.isEnabled()) {
-            AlertDialogExample.showAlertDialog(getActivity(), "Blueetooth", "Enable Bluetooth");
+            AlertDialogExample.showAlertDialog(getActivity(), "Bluetooth", "Enable Bluetooth");
         }
         btn = view.findViewById(R.id.round_button);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +63,7 @@ public class FragmentA extends Fragment {
             public void onClick(View view) {
                 if (btn.getText() == "Scan") {
                     if (!adapter.isEnabled()) {
-                        AlertDialogExample.showAlertDialog(getActivity(), "Blueetooth", "Enable Bluetooth");
+                        AlertDialogExample.showAlertDialog(getActivity(), "Bluetooth", "Enable Bluetooth");
                     }
                     System.out.println(startDiscovery());
                     btn.setText("Stop");

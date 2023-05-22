@@ -7,12 +7,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal">
 
-
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/my_toolbar"
         android:contentDescription="@string/tabs">
 
     </com.google.android.material.tabs.TabLayout>
@@ -21,9 +30,11 @@
         android:id="@+id/views"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
+        android:layout_below="@id/tabs"
         android:background="@color/white"
         tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="231dp"/>
+        tools:layout_editor_absoluteY="231dp">
+    </androidx.viewpager.widget.ViewPager>
+
 
 </RelativeLayout>

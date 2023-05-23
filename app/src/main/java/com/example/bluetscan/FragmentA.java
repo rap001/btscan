@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -15,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainer;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +30,10 @@ import java.util.Set;
 public class FragmentA extends Fragment {
 
 
+   public static String intervel;
+   public static boolean isBle;
     Button btn;
+
     ListView lv;
     BroadcastReceiver broadcastReceiver;
     BluetoothAdapter adapter;
@@ -54,6 +59,9 @@ public class FragmentA extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         adapter = BluetoothAdapter.getDefaultAdapter();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        System.out.println(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("inter", null));
+
         if (!adapter.isEnabled()) {
             AlertDialogExample.showAlertDialog(getActivity(), "Bluetooth", "Enable Bluetooth");
         }
@@ -65,7 +73,20 @@ public class FragmentA extends Fragment {
                     if (!adapter.isEnabled()) {
                         AlertDialogExample.showAlertDialog(getActivity(), "Bluetooth", "Enable Bluetooth");
                     }
-                    System.out.println(startDiscovery());
+                    intervel=preferences.getString("inter"," ");
+                    isBle=preferences.getBoolean("useBLE",true);
+                    Toast toast = Toast.makeText(getContext(),intervel,Toast.LENGTH_SHORT);
+                    toast.show();
+                    if (isBle==false){
+                        System.out.println(startDiscovery());
+
+                    }
+                    else{
+                        //this part is for ble
+                         startLeScan();
+                    }
+                    System.out.println(isBle);
+
                     btn.setText("Stop");
                 } else {
                     adapter.cancelDiscovery();
@@ -124,5 +145,11 @@ public class FragmentA extends Fragment {
 
         return adapter.startDiscovery();
 
+    }
+    private void startLeScan() {
+
+
+
+        adapter.startDiscovery();
     }
 }

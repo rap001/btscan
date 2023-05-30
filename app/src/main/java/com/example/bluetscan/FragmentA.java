@@ -1,7 +1,11 @@
 package com.example.bluetscan;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +17,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainer;
 
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,26 +31,30 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.List;
 import java.util.Set;
 
 public class FragmentA extends Fragment {
 
 
-   public static String intervel;
-   public static boolean isBle;
+    private static final int PERMISSION_REQUEST_CODE = 99;
+    private static final int PERMISSION_REQUEST_CODE1 =100 ;
+    public static String intervel;
+    public static boolean isBle;
     Button btn;
-
+    ScanCallback scanCallback;
     ListView lv;
     BroadcastReceiver broadcastReceiver;
     BluetoothAdapter adapter;
     Set<BluetoothDevice> btset;
+    BluetoothLeScanner ble;
+    Handler handler;
 
 
-
-    public interface ListUpdate
-    {
+    public interface ListUpdate {
         void sendData(BluetoothDevice device);
     }
+
     private ListUpdate listener;
 
     @Override
@@ -59,6 +69,20 @@ public class FragmentA extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         adapter = BluetoothAdapter.getDefaultAdapter();
+        handler = new Handler();
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            // Request permission
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+        }
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED||ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+
+            // Request permission
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_ADMIN,Manifest.permission.BLUETOOTH_SCAN}, PERMISSION_REQUEST_CODE1);
+        }
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         System.out.println(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("inter", null));
 
@@ -73,23 +97,26 @@ public class FragmentA extends Fragment {
                     if (!adapter.isEnabled()) {
                         AlertDialogExample.showAlertDialog(getActivity(), "Bluetooth", "Enable Bluetooth");
                     }
-                    intervel=preferences.getString("inter"," ");
-                    isBle=preferences.getBoolean("useBLE",true);
-                    Toast toast = Toast.makeText(getContext(),intervel,Toast.LENGTH_SHORT);
+                    intervel = preferences.getString("inter", " ");
+                    isBle = preferences.getBoolean("useBLE", true);
+                    Toast toast = Toast.makeText(getContext(), intervel, Toast.LENGTH_SHORT);
                     toast.show();
-                    if (isBle==false){
+                    if (isBle == false) {
                         System.out.println(startDiscovery());
 
-                    }
-                    else{
+                    } else {
                         //this part is for ble
-                         startLeScan();
+
+                        startLeScan();
                     }
                     System.out.println(isBle);
 
                     btn.setText("Stop");
                 } else {
                     adapter.cancelDiscovery();
+                    if(ble!=null){
+                        ble.stopScan(scanCallback);
+                    }
                     if (broadcastReceiver != null) {
                         System.out.println(broadcastReceiver.getResultData() + "  " + broadcastReceiver.toString());
                     }
@@ -106,13 +133,13 @@ public class FragmentA extends Fragment {
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     String deviceName = device.getName();
                     String deviceHardwareAddress = device.getAddress();
-                    if(listener!=null){
+                    if (listener != null) {
                         listener.sendData(device);
                     }
-                    //System.out.println(deviceName + " " + deviceHardwareAddress);
                 }
             }
         };
+
     }
 
     @Override
@@ -121,8 +148,7 @@ public class FragmentA extends Fragment {
 
         try {
             listener = (ListUpdate) ((MainActivity) getActivity());
-        }
-        catch (ClassCastException e) {
+        } catch (ClassCastException e) {
             throw new ClassCastException("Error in retrieving data. Please try again");
         }
     }
@@ -146,10 +172,31 @@ public class FragmentA extends Fragment {
         return adapter.startDiscovery();
 
     }
+
     private void startLeScan() {
 
+        ble = adapter.getBluetoothLeScanner();
+        scanCallback = new ScanCallback() {
+            @Override
+            public void onScanResult(int callbackType, ScanResult result) {
+                super.onScanResult(callbackType, result);
+                listener.sendData(result.getDevice());
+            }
 
+            @Override
+            public void onBatchScanResults(List<ScanResult> results) {
+                super.onBatchScanResults(results);
+                Toast.makeText(getActivity(), results.toString(), Toast.LENGTH_SHORT).show();
+            }
 
-        adapter.startDiscovery();
+            @Override
+            public void onScanFailed(int errorCode) {
+                super.onScanFailed(errorCode);
+                Toast.makeText(getActivity(), errorCode + "", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        ble.startScan(scanCallback);
+
     }
 }

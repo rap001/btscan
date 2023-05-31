@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements FragmentA.ListUpd
     }
 
     @Override
-    public void sendData(BluetoothDevice device) {
-        fb.onDataChanged(device);
+    public void sendData(BluetoothDevice device,short rssi) {
+
+        fb.onDataChanged(device,rssi);
     }
 }

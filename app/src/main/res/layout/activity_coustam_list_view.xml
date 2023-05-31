@@ -31,6 +31,12 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="address" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rssi"
+            android:gravity="center"
+            android:text="rssi"/>
     </LinearLayout>
 
 </LinearLayout>

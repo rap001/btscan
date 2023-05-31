@@ -10,7 +10,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class CustomBaseAdapter extends BaseAdapter {
@@ -19,35 +21,41 @@ public class CustomBaseAdapter extends BaseAdapter {
     LayoutInflater inflater;
     String[] str;
     String[] str1;
-    Set<BluetoothDevice> btset;
+    Short [] rssi;
+    HashMap<BluetoothDevice,Short> btset;
 
-    public CustomBaseAdapter(Context ctx, Set<BluetoothDevice> bset){
+    public CustomBaseAdapter(Context ctx, HashMap<BluetoothDevice,Short> bset){
+
         context=ctx;
         btset=bset;
         str=new String[btset.size()];
         str1=new String[btset.size()];
+        rssi=new Short[btset.size()];
         int i=0;
         if(btset.size()>0)
         {
-            for(BluetoothDevice device:btset){
+            for(BluetoothDevice device:btset.keySet()){
                 str[i]=device.getName();
                 str1[i]=device.getAddress();
+                rssi[i]= btset.get(device);
                 i++;
             }
         }
         inflater=LayoutInflater.from(ctx);
 
     }
-    public void setData(Set<BluetoothDevice> data) {
+    public void setData(HashMap<BluetoothDevice,Short> data) {
         this.btset=data;
         str=new String[btset.size()];
         str1=new String[btset.size()];
+        rssi=new Short[btset.size()];
         int i=0;
         if(btset.size()>0)
         {
-            for(BluetoothDevice device:btset){
+            for(BluetoothDevice device:btset.keySet()){
                 str[i]=device.getName();
                 str1[i]=device.getAddress();
+                rssi[i]=data.get(device);
                 i++;
             }
         }
@@ -75,9 +83,11 @@ public class CustomBaseAdapter extends BaseAdapter {
         TextView textView=(TextView) convertView.findViewById(R.id.title_textview);
         TextView textView1=(TextView) convertView.findViewById(R.id.addr);
         ImageView img=(ImageView) convertView.findViewById(R.id.imageicon);
+        TextView rssiValue=(TextView) convertView.findViewById(R.id.rssi);
         img.setImageResource(R.drawable.bluetooth);
         textView.setText(str[i]);
         textView1.setText(str1[i]);
+        rssiValue.setText(rssi[i].toString());
         return convertView;
     }
 }

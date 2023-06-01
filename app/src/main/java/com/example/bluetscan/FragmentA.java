@@ -51,9 +51,10 @@ public class FragmentA extends Fragment {
     BluetoothAdapter adapter;
     Set<BluetoothDevice> btset;
     BluetoothLeScanner ble;
+    SharedPreferences preferences;
     Handler handler;
     private Handler updateHandler;
-    private Runnable updateRunnable;
+    private Runnable updateRunnable,scanble;
 
 
     public interface ListUpdate {
@@ -77,16 +78,19 @@ public class FragmentA extends Fragment {
         long INTERVAL=1000;
         handler = new Handler();
         updateHandler = new Handler();
+        ble=adapter.getBluetoothLeScanner();
         updateRunnable = new Runnable() {
             @Override
             public void run() {
                 // Call the method to update the devices here
-                updateDevices();
+                startScan();
                 // Schedule the next update after the specified interval
 
-                updateHandler.postDelayed(this, INTERVAL); // INTERVAL is the time interval in milliseconds
+                // INTERVAL is the time interval in milliseconds
             }
         };
+
+
         isScanning=false;
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -101,7 +105,7 @@ public class FragmentA extends Fragment {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.BLUETOOTH_CONNECT,Manifest.permission.BLUETOOTH,Manifest.permission.BLUETOOTH_ADMIN,Manifest.permission.BLUETOOTH_SCAN}, PERMISSION_REQUEST_CODE1);
         }
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         System.out.println(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("inter", null));
 
         if (!adapter.isEnabled()) {
@@ -119,17 +123,7 @@ public class FragmentA extends Fragment {
                     isBle = preferences.getBoolean("useBLE", true);
                     Toast toast = Toast.makeText(getContext(), intervel, Toast.LENGTH_SHORT);
                     toast.show();
-                    if (!isBle) {
-                        startDiscovery();
-                        updateHandler.postDelayed(updateRunnable, INTERVAL);
-
-                    } else {
-                        //this part is for ble
-
-                        startLeScan();
-                    }
-                    System.out.println(isBle);
-
+                    startDiscovery();
                     btn.setText("Stop");
                 } else {
                     stopScan();
@@ -157,22 +151,21 @@ public class FragmentA extends Fragment {
                 }
             }
         };
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        getActivity().registerReceiver(broadcastReceiver, filter);
 
 
 
     }
 
     private void updateDevices() {
-        adapter.startDiscovery();
-        stop=new Runnable() {
-            @Override
-            public void run() {
+        isBle=preferences.getBoolean("useBLE", true);
+        adapter.cancelDiscovery();
+        if(!isScanning){
+            startDiscovery();
+        }
 
-                updateHandler.postDelayed(stop,1000);
-                adapter.cancelDiscovery();
-            }
-        };
-        updateHandler.postDelayed(stop,1000);
+
     }
 
     @Override
@@ -199,29 +192,35 @@ public class FragmentA extends Fragment {
     }
 
     private void  startDiscovery() {
-        // Register for discovery events
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        getActivity().registerReceiver(broadcastReceiver, filter);
+        isBle=preferences.getBoolean("useBLE",true);
+        if(!isBle){
 
-        if (!isScanning) {
-            isScanning=true;
-            // Start the Bluetooth discovery process
-            System.out.println(adapter.startDiscovery()+":scanning status");
 
+
+            if (!isScanning) {
+                startScan();
+
+
+            }
         }
+        else{
+            if(!isScanning){
+                startLeScan();
+            }
+        }
+
 
 
 
     }
 
     private void startLeScan() {
-
-        ble = adapter.getBluetoothLeScanner();
+        isScanning=true;
         scanCallback = new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
                 super.onScanResult(callbackType, result);
-               // listener.sendData(result.getDevice());
+               listener.sendData(result.getDevice(), ((short) result.getRssi()));
             }
 
             @Override
@@ -241,12 +240,11 @@ public class FragmentA extends Fragment {
 
     }
     void stopScan(){
+        isBle=preferences.getBoolean("useBLE", true);
         if (isScanning){
             isScanning=false;
             adapter.cancelDiscovery();
-            if(ble!=null){
-                ble.stopScan(scanCallback);
-            }
+            ble.stopScan(scanCallback);
             if (broadcastReceiver != null) {
                 System.out.println(broadcastReceiver.getResultData() + "  " + broadcastReceiver.toString());
             }
@@ -254,6 +252,13 @@ public class FragmentA extends Fragment {
 
         }
 
+
+    }
+    void startScan(){
+        isScanning=true;
+        adapter.cancelDiscovery();
+        adapter.startDiscovery();
+        updateHandler.postDelayed(updateRunnable,2000);
     }
     public void onDestroy() {
         super.onDestroy();

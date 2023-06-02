@@ -79,13 +79,21 @@ public class FragmentA extends Fragment {
         handler = new Handler();
         updateHandler = new Handler();
         ble=adapter.getBluetoothLeScanner();
+        stop=new Runnable() {
+            @Override
+            public void run() {
+                if(adapter.isEnabled())
+                    adapter.cancelDiscovery();
+                updateHandler.postDelayed(updateRunnable,1000);
+            }
+        };
         updateRunnable = new Runnable() {
             @Override
             public void run() {
                 // Call the method to update the devices here
-                startScan();
+                adapter.startDiscovery();
                 // Schedule the next update after the specified interval
-
+                updateHandler.postDelayed(stop,1000);
                 // INTERVAL is the time interval in milliseconds
             }
         };
@@ -128,6 +136,7 @@ public class FragmentA extends Fragment {
                 } else {
                     stopScan();
                     updateHandler.removeCallbacks(updateRunnable);
+                    updateHandler.removeCallbacks(stop);
                     btn.setText("Scan");
                 }
             }
@@ -243,8 +252,11 @@ public class FragmentA extends Fragment {
         isBle=preferences.getBoolean("useBLE", true);
         if (isScanning){
             isScanning=false;
-            adapter.cancelDiscovery();
-            ble.stopScan(scanCallback);
+            if(adapter.isEnabled()){
+                adapter.cancelDiscovery();
+                ble.stopScan(scanCallback);
+            }
+
             if (broadcastReceiver != null) {
                 System.out.println(broadcastReceiver.getResultData() + "  " + broadcastReceiver.toString());
             }
@@ -256,7 +268,6 @@ public class FragmentA extends Fragment {
     }
     void startScan(){
         isScanning=true;
-        adapter.cancelDiscovery();
         adapter.startDiscovery();
         updateHandler.postDelayed(updateRunnable,2000);
     }

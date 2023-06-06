@@ -44,13 +44,13 @@ public class MainActivity extends AppCompatActivity implements FragmentA.ListUpd
         tabs.setupWithViewPager(viewPager);
 
         tabs.addTab(tabs.newTab().setText("Scan"));
-        tabs.addTab(tabs.newTab().setText("History"));
+        tabs.addTab(tabs.newTab().setText("Devices"));
 
         MyPagerAdapter pg = new MyPagerAdapter(getSupportFragmentManager());
         FragmentA fa=new FragmentA();
         fb=new FragmentB();
         pg.addFragment(fa, "Scan");
-        pg.addFragment(fb, "History");
+        pg.addFragment(fb, "Devices");
 
         viewPager.setAdapter(pg);
 

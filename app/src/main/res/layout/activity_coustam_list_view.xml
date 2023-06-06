@@ -5,16 +5,38 @@
     android:layout_height="match_parent"
     tools:context=".CoustamListView">
 
-
-    <ImageView
-        android:id="@+id/imageicon"
+    <LinearLayout
         android:layout_width="50dp"
-        android:layout_height="50dp" />
+        android:orientation="vertical"
+        android:layout_height="100dp">
+
+        <ImageView
+            android:id="@+id/imageicon"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+        <TextView
+            android:id="@+id/rssi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16dp"
+            android:text="rssi" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/timestamp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textSize="16dp"
+            android:text="timestamp" />
 
         <TextView
             android:id="@+id/title_textview"
@@ -23,20 +45,16 @@
             android:gravity="center"
             android:text="my text"
             android:textColor="@color/black"
-            android:textSize="24dp" />
+            android:textSize="30dp" />
 
         <TextView
             android:id="@+id/addr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:textSize="18dp"
             android:text="address" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/rssi"
-            android:gravity="center"
-            android:text="rssi"/>
+
     </LinearLayout>
 
 </LinearLayout>

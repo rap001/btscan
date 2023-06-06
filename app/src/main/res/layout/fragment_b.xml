@@ -8,13 +8,7 @@
     tools:context=".FragmentB">
 
     <!-- TODO: Update blank fragment layout -->
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="71dp"
-        android:layout_gravity="center"
-        android:text="Saved"
-        android:textColor="@color/black"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
 
     <ListView
         android:id="@+id/list"

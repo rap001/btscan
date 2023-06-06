@@ -55,6 +55,7 @@ public class FragmentA extends Fragment {
     Handler handler;
     private Handler updateHandler;
     private Runnable updateRunnable,scanble;
+    long INTERVAL;
 
 
     public interface ListUpdate {
@@ -75,7 +76,6 @@ public class FragmentA extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         adapter = BluetoothAdapter.getDefaultAdapter();
-        long INTERVAL=1000;
         handler = new Handler();
         updateHandler = new Handler();
         ble=adapter.getBluetoothLeScanner();
@@ -84,7 +84,7 @@ public class FragmentA extends Fragment {
             public void run() {
                 if(adapter.isEnabled())
                     adapter.cancelDiscovery();
-                updateHandler.postDelayed(updateRunnable,1000);
+                updateHandler.postDelayed(updateRunnable,INTERVAL);
             }
         };
         updateRunnable = new Runnable() {
@@ -93,7 +93,7 @@ public class FragmentA extends Fragment {
                 // Call the method to update the devices here
                 adapter.startDiscovery();
                 // Schedule the next update after the specified interval
-                updateHandler.postDelayed(stop,1000);
+                updateHandler.postDelayed(stop, 1000);
                 // INTERVAL is the time interval in milliseconds
             }
         };
@@ -114,7 +114,7 @@ public class FragmentA extends Fragment {
         }
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        System.out.println(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("inter", null));
+        System.out.println(preferences.getString("inter", null));
 
         if (!adapter.isEnabled()) {
             AlertDialogExample.showAlertDialog(getActivity(), "Bluetooth", "Enable Bluetooth");
@@ -128,9 +128,24 @@ public class FragmentA extends Fragment {
                         AlertDialogExample.showAlertDialog(getActivity(), "Bluetooth", "Enable Bluetooth");
                     }
                     intervel = preferences.getString("inter", " ");
+                    switch (intervel){
+                        case "1 min":
+                            INTERVAL = 6000;
+                            break;
+                        case "10 sec":
+                            INTERVAL = 1000;
+                            break;
+                        case "15 sec":
+                            INTERVAL = 1500;
+                            break;
+                        case "20 sec":
+                            INTERVAL = 2000;
+                            break;
+                        case "30 sec":
+                            INTERVAL = 3000;
+                            break;
+                    }
                     isBle = preferences.getBoolean("useBLE", true);
-                    Toast toast = Toast.makeText(getContext(), intervel, Toast.LENGTH_SHORT);
-                    toast.show();
                     startDiscovery();
                     btn.setText("Stop");
                 } else {
@@ -229,7 +244,7 @@ public class FragmentA extends Fragment {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
                 super.onScanResult(callbackType, result);
-               listener.sendData(result.getDevice(), ((short) result.getRssi()));
+                listener.sendData(result.getDevice(), ((short) result.getRssi()));
             }
 
             @Override
@@ -269,7 +284,7 @@ public class FragmentA extends Fragment {
     void startScan(){
         isScanning=true;
         adapter.startDiscovery();
-        updateHandler.postDelayed(updateRunnable,2000);
+        updateHandler.postDelayed(stop,2000);
     }
     public void onDestroy() {
         super.onDestroy();

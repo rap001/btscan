@@ -10,6 +10,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,5 +92,15 @@ public class CustomBaseAdapter extends BaseAdapter {
         textView1.setText(str1[i]);
         rssiValue.setText(rssi[i].toString());
         return convertView;
+    }
+    public String timeStamp(){
+        Date current = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormat.format(current);
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        String formattedTime = timeFormat.format(current);
+        return dateFormat+":"+timeFormat;
+
+
     }
 }

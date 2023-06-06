@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".CoustamListView">
 
 
@@ -10,10 +10,18 @@
         android:id="@+id/imageicon"
         android:layout_width="50dp"
         android:layout_height="50dp" />
+    <TextView
+        android:id="@+id/rssi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:text="rssi" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
@@ -23,7 +31,7 @@
             android:gravity="center"
             android:text="my text"
             android:textColor="@color/black"
-            android:textSize="24dp" />
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/addr"
@@ -31,12 +39,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="address" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/rssi"
-            android:gravity="center"
-            android:text="rssi"/>
+
     </LinearLayout>
 
 </LinearLayout>

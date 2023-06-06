@@ -9,7 +9,7 @@
                     android:defaultValue="3"
                     android:dialogTitle="@string/interstring"
                     android:entries="@array/intervals"
-                    android:entryValues="@array/pref_duration"
+                    android:entryValues="@array/intervals"
                     android:key="inter"
                     android:summary="Choose the scanning interval"
                     android:title="Scanning Interval" />

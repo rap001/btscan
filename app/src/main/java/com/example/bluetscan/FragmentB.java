@@ -87,14 +87,9 @@ public class FragmentB extends Fragment {
             @Override
             public void run() {
                 // Clear the current devices
-
+                btset.clear();
                 // Get the updated bonded devices
-                Set<BluetoothDevice> bondedDevices = btset.keySet();
-                for (BluetoothDevice device : bondedDevices) {
-                    // Update the RSSI value for each bonded device
-                    Short rssi =new Short("0") ; // Replace with your RSSI retrieval logic
-                    btset.put(device, rssi);
-                }
+
 
                 // Notify the adapter about the changes
                 cd.setData(btset);

@@ -3,6 +3,7 @@ package com.example.bluetscan;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,17 +97,33 @@ public class CustomBaseAdapter extends BaseAdapter {
         catch (Exception e){
             rssi_val=0;
         }
-        if (rssi_val ==0) {
-            img.setImageResource(R.drawable.no_signal);
-        } else if (rssi_val>-50) {
-            img.setImageResource(R.drawable.excellent);
-        } else if (rssi_val>-70) {
-            img.setImageResource(R.drawable.good);
-        } else if (rssi_val>-80) {
-            img.setImageResource(R.drawable.fair);
-        }
-        else {
-            img.setImageResource(R.drawable.weak);
+
+        if (isDarkModeEnabled()) {
+            // Use the dark mode version of the icons
+            if (rssi_val == 0) {
+                img.setImageResource(R.drawable.no_signal_dark);
+            } else if (rssi_val > -50) {
+                img.setImageResource(R.drawable.excellent_dark);
+            } else if (rssi_val > -70) {
+                img.setImageResource(R.drawable.good_dark);
+            } else if (rssi_val > -80) {
+                img.setImageResource(R.drawable.fair_dark);
+            } else {
+                img.setImageResource(R.drawable.weak_dark);
+            }
+        } else {
+            // Use the light mode version of the icons
+            if (rssi_val == 0) {
+                img.setImageResource(R.drawable.no_signal);
+            } else if (rssi_val > -50) {
+                img.setImageResource(R.drawable.excellent);
+            } else if (rssi_val > -70) {
+                img.setImageResource(R.drawable.good);
+            } else if (rssi_val > -80) {
+                img.setImageResource(R.drawable.fair);
+            } else {
+                img.setImageResource(R.drawable.weak);
+            }
         }
         textView.setText(str[i]);
         textView1.setText(str1[i]);
@@ -122,5 +139,10 @@ public class CustomBaseAdapter extends BaseAdapter {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         String formattedTime = timeFormat.format(current);
         return formattedDate+"       "+formattedTime;
+    }
+
+    private boolean isDarkModeEnabled() {
+        int currentNightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        return currentNightMode == Configuration.UI_MODE_NIGHT_YES;
     }
 }

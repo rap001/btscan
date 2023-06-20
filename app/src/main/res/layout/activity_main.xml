@@ -31,7 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tabs"
-        android:background="@color/white"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="231dp">
     </androidx.viewpager.widget.ViewPager>

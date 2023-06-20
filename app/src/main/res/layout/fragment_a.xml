@@ -13,8 +13,7 @@
         android:layout_gravity="center"
         android:background="@drawable/circle"
         android:padding="16dp"
-        android:text="scan"
-        android:textColor="@android:color/white" />
+        android:text="scan" />
 
 
 </FrameLayout>

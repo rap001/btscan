@@ -22,7 +22,7 @@ import com.google.android.material.tabs.TabLayout;
 
 
 
-public class MainActivity extends AppCompatActivity implements FragmentA.ListUpdate {
+public class MainActivity extends AppCompatActivity{
     ListView listView;
     BroadcastReceiver broadcastReceiver;
     FragmentB fb;
@@ -67,11 +67,5 @@ public class MainActivity extends AppCompatActivity implements FragmentA.ListUpd
         Intent i = new Intent(this, SettingsActivity.class);
         startActivity(i);
         return true;
-    }
-
-    @Override
-    public void sendData(BluetoothDevice device,short rssi) {
-
-        fb.onDataChanged(device,rssi);
     }
 }

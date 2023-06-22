@@ -3,6 +3,10 @@ package com.example.bluetscan;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -36,6 +40,8 @@ import java.util.TimerTask;
 public class FragmentB extends Fragment {
 
     private static final int PERMISSION_REQUEST_CODE2 =101 ;
+    public static final String ACTION_DEVICE_FOUND = "com.example.bluetscan.ACTION_DEVICE_FOUND";
+
     HashMap<BluetoothDevice, Short> btset;
     CustomBaseAdapter cd;
     BluetoothAdapter adapter;
@@ -43,6 +49,18 @@ public class FragmentB extends Fragment {
     private Handler handler;
     private Runnable updateRunnable;
     private static final int UPDATE_INTERVAL = 20000;
+    private BroadcastReceiver bluetoothDeviceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if ("com.example.bluetscan.BLUETOOTH_DEVICE_FOUND".equals(action)) {
+                BluetoothDevice device = intent.getParcelableExtra("device");
+                short rssi = intent.getShortExtra("rssi", Short.MIN_VALUE);
+                onDataChanged(device, rssi);
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,7 +80,8 @@ public class FragmentB extends Fragment {
             // Request permission
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_ADMIN,Manifest.permission.BLUETOOTH_SCAN}, PERMISSION_REQUEST_CODE2);
         }
-
+        IntentFilter filter = new IntentFilter("com.example.bluetscan.BLUETOOTH_DEVICE_FOUND");
+        getActivity().registerReceiver(bluetoothDeviceReceiver, filter);
         Set<BluetoothDevice> btset1 = adapter.getBondedDevices();
         btset=new HashMap<BluetoothDevice,Short>();
         for (BluetoothDevice device : btset1){
@@ -106,6 +125,7 @@ public class FragmentB extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        getActivity().unregisterReceiver(bluetoothDeviceReceiver);
         handler.removeCallbacks(updateRunnable);
     }
 }
